@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script>
+function initialize() {
+  var mapProp = {
+    center:new google.maps.LatLng(50.073645,14.429768),
+    zoom:15,
+    mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+  
+  var marker = new google.maps.Marker({
+      position: new google.maps.LatLng(50.073645,14.429768),
+      title:"Hello World!"
+  });
+  // To add the marker to the map, call setMap();
+  marker.setMap(map);  
+
+  setInterval(function() {
+      position = new google.maps.LatLng(50.073645,14.429768);
+      marker.setPosition(position);
+  }, 2000);   
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+</head>
+
+<body>
+<div id="googleMap" style="width:640px;height:480px;"></div>
+
+<div class="att-m2x-widget" data-widget-url="http://api-m2x.att.com/v2/widgets/66fc42d4" data-poll-interval="5"></div>
+<!-- Include the following script tag only once per page -->
+<script src="https://m2x.att.com/widgets.js" async></script>
+
+</body>
+
+</html>
