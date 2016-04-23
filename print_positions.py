@@ -4,16 +4,6 @@ import pyproj
 
 PORT = 8813
 
-#taken from osm.net.xml
-#    <location netOffset="-390665.61,-5820288.44" convBoundary="0.00,0.00,2745.71,2424.95" origBoundary="13.388361,52.522056,13.428613,52.544043" projParameter="+proj=utm +zone=33 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"/>
-
-OFFSET_x = -390665.61
-OFFSET_y = -5820288.44
-PROJECTION = pyproj.Proj("+proj=utm +zone=33 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
-
-def transform(x,y):
-	return PROJECTION(x + OFFSET_x, y + OFFSET_y, inverse=True)
-
 traci.init(PORT) 
 
 
@@ -26,6 +16,10 @@ for step in range(3):
    traci.simulationStep()
    r = traci.vehicle.getSubscriptionResults(vehID)
    print r
-   print transform(r[tc.VAR_POSITION][0], r[tc.VAR_POSITION][1])
+   x = r[tc.VAR_POSITION][0]
+   y = r[tc.VAR_POSITION][1]
+   lon, lat = traci.simulation.convertGeo(x, y)
+   s = r[tc.VAR_SPEED]
+   print lon, lat
 
 traci.close()
