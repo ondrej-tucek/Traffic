@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<title>Leaflet Quick Start Guide Example</title>
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+<!-- 	<link rel="stylesheet" href="leaflet.css"> -->
+<!-- 	<script src="leaflet.js"></script> -->
+	<style>
+	    body {
+		padding: 0;
+		margin: 0;
+	    }
+	    html, body, #map {
+		height: 100%;
+	    }
+	</style>
+</head>
+<body>
+	<div id="mapid" style="width: 700px; height: 500px"></div>
+	<div class='heatmap' style="width: 700px; height: 500px">
+<!-- 	    <canvas width="800" height="742" style="position:absolute; left: 0; top: 0"></canvas> -->
+	    <canvas width="800" height="742"></canvas>
+	</div>
+
+</body>
+
+
+<script>
+
+	var mymap = L.map('mapid').setView([50.092778, 14.437382], 13);
+	var Circles = L.circle([50.092778, 14.437382], 0, {
+	    color: '#f03',
+	    fillOpacity: 1,
+	    // 			      fillColor: '#f03'
+	}).addTo(mymap);
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+		maxZoom: 25,
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		id: 'mapbox.streets'
+	}).addTo(mymap);
+
+
+	setInterval(function(){
+		var getJSON = function(url, successHandler, errorHandler) {
+			var xhr = typeof XMLHttpRequest != 'undefined'
+				? new XMLHttpRequest()
+				: new ActiveXObject('Microsoft.XMLHTTP');
+			xhr.open('get', url, true);
+			xhr.onreadystatechange = function() {
+				var status;
+				var data;
+				// https://xhr.spec.whatwg.org/#dom-xmlhttprequest-readystate
+				if (xhr.readyState == 4) { // `DONE`
+					status = xhr.status;
+					if (status == 200) {
+						data = JSON.parse(xhr.responseText);
+						successHandler && successHandler(data);
+					} else {
+						errorHandler && errorHandler(status);
+					}
+				}
+			};
+			xhr.send();
+		};
+		var url_source = ["http://api-m2x.att.com/v2/devices/f6792062cb048eeeaa5c3b3079d70e82/location/",
+				  "http://api-m2x.att.com/v2/devices/1435efca54872bf96e5232fbcd670792/location/",
+				  "http://api-m2x.att.com/v2/devices/a2ca89cef728499d5d0a299553db4f71/location/",
+				  "http://api-m2x.att.com/v2/devices/6c0bf369abd9d920ddd8a85801944429/location/",
+				  "http://api-m2x.att.com/v2/devices/1dcd9af8e1fea96903ba5a1f9ec1ae3b/location/",
+				  "http://api-m2x.att.com/v2/devices/c2181b6165f7db6055bea53b7938fd60/location/",
+				  "http://api-m2x.att.com/v2/devices/9a5bc79f86eedc092c86c09f4908c806/location/",
+				  "http://api-m2x.att.com/v2/devices/cfa068e9d790388c2eb3d8839ca18b17/location/",
+				  "http://api-m2x.att.com/v2/devices/de34e99d49cf8b36c5f23b9d7411d414/location/",
+				  "http://api-m2x.att.com/v2/devices/3e9acead0a8584f99ed3aef0e41a14d5/location/"];
+
+// 		for (var i=0; i < url_source.length; i++)  {
+// 		    mymap.removeLayer(Circles);
+// 		    }
+// 		var color = ["#4f345a",
+// 			     "#8fa998",
+// 			     "#3b0c6d",
+// 			     "#26a854",
+// 			     "#005119",
+// 			     "#351721",
+// 			     "#8724f2",
+// 			     "#ff0000",
+// 			     "#66ffff",
+// 			     "#ffcc66"];
+// 		    
+
+		
+		for (var i = 0; i < url_source.length; i++) {
+		    getJSON(url_source[i], function(data) {
+		    
+// 			console.log(data.latitude)
+			
+			  var Circles = L.circle([data.latitude, data.longitude], 5, {
+				  color: '#03f',
+// 				  opacity: 0.5,
+// 				  fillOpacity: 1,
+    // 			      fillColor: '#f03'
+			  }).addTo(mymap);
+			  
+    // 		      mymap.on('zoomend', function() {
+    // 			  var currentZoom = mymap.getZoom();
+    // 			  Circles.setRadius(currentZoom);
+    // 		      });
+		    
+		    }, function(status) {
+// 			    alert('Something went wrong.');
+		    });
+		}
+	}, 500);
+
+</script>
+
+</html>
