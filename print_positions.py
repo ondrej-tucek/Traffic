@@ -11,7 +11,7 @@ vehID = 'veh1'
 traci.vehicle.subscribe(vehID, (tc.VAR_SPEED, tc.VAR_POSITION))
 
 print traci.vehicle.getSubscriptionResults(vehID)
-for step in range(3):
+for step in range(100):
    print "step", step
    traci.simulationStep()
    r = traci.vehicle.getSubscriptionResults(vehID)
@@ -20,6 +20,6 @@ for step in range(3):
    y = r[tc.VAR_POSITION][1]
    lon, lat = traci.simulation.convertGeo(x, y)
    s = r[tc.VAR_SPEED]
-   print lon, lat
+   print lat, lon 
 
 traci.close()
